@@ -23,7 +23,7 @@ main PROC
 
 	sub eax, ecx	; EAX = EAX - ECX	=> EAX = (x+y) - (z+w)
 	mov edx, eax
-
+	mov FinalResult, eax
 	Call WriteHex
 exit
 main ENDP
