@@ -3,9 +3,9 @@ INCLUDE Irvine32.inc
 .data
 DayTemp WORD 30     ; Day Temperature
 NightTemp WORD 18   ; Night Temperature
-Difference  DWORD ?
+Difference WORD ?   ; Changed to WORD since difference will be small
 
-msgDayTemp BYTE "Day Tempertaure: ", 0
+msgDayTemp BYTE "Day Temperature: ", 0
 msgNightTemp BYTE "Night Temperature: ", 0
 msgDifference BYTE "Temperature Difference: ", 0
 msgInc BYTE "Incremented Night Temperature: ", 0
@@ -13,36 +13,38 @@ msgInc BYTE "Incremented Night Temperature: ", 0
 .code
 main PROC
     
-    movzx eax, DayTemp          ; EAX = DayTemp      => EAX = 30
-    mov edx, OFFSET msgDayTemp
-    call WriteString            ; Print Current Day Temperature
-    call WriteDec               ; Printing Day Temperature
-    call Crlf                   ; Printing New Line
+    mov edx, OFFSET msgDayTemp      ; Display Day Temperature
+    call WriteString
+    movzx eax, DayTemp              ; Storing Day Temp in EAX to be printed
+    call WriteDec
+    call Crlf                       ; Print New Line
 
-    movzx ebx, NightTemp        ; EBX =  NightTemp      => EBX = 18
-    XCHG eax, ebx               ; Exhanging the temp values so that temp could be printed
-    mov edx, OFFSET msgNightTemp
-    call WriteString            ; Print Current Night Temperature
-    call WriteDec               ; Printing Night Temperature
-    call Crlf                   ; Printing New Line
+    mov edx, OFFSET msgNightTemp    ; Display Night Temperature
+    call WriteString
+    movzx eax, NightTemp            ; Storing Night Temp in EAX to be printed
+    call WriteDec
+    call Crlf                       ; Print New Line
+
+    mov ax, DayTemp                 ; AX = DayTemp          => AX = 30
+    sub ax, NightTemp               ; AX = AX - NightTemp   => AX = 30 - 18
+    mov Difference, ax
     
-    XCHG eax, ebx
-    sub eax, ebx                ; EAX = EAX - EBX    => EAX = 30 - 18
-    mov Difference, eax
-    mov edx, OFFSET msgDifference
-    call WriteString            ; Print Temperature Difference
-    call WriteDec               ; Printing Temperature Difference
-    call Crlf 
+    mov edx, OFFSET msgDifference   ; Display Temperature Difference
+    call WriteString
+    movzx eax, Difference           ; Storing Temp Difference in EAX to be printed
+    call WriteDec
+    call Crlf                       ; Print New Line
 
     mov ax, NightTemp
-    INC ax                     ; EAX = EAX + 1     => EAX = 18 + 1
-    INC ax                     ; EAX = EAX + 1     => EAX = 19 + 1
+    add ax, 2                       ; Incrementing Night temp by 2
     mov NightTemp, ax
-    mov edx, OFFSET msgInc
-    call WriteString            ; Print Incremented Night Temperature
-    call WriteDec               ; Printing Night Temperature
-    call Crlf 
+    
+    mov edx, OFFSET msgInc          ; Display incremented temperature
+    call WriteString
+    movzx eax, NightTemp            ; Storing Incremented Night Temp in EAX to be printed
+    call WriteDec
+    call Crlf                       ; Print New Line
 
-exit
+    exit
 main ENDP
 END main
