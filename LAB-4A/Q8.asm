@@ -11,7 +11,6 @@ main PROC
     mov ax, 10      ; Initialize Register AX = 10
     mov bx, 20      ; Initialize Register BX = 20
     
-    
     mov edx, OFFSET msg1    ; Store Before Swap Message
     call WriteString        ; Print the Message
     movzx eax, ax           ; Storing the Original AX Value to be Printed through EAX
@@ -22,7 +21,6 @@ main PROC
     movzx eax, bx           ; Storing the Original BX Value to be Printed through EAX
     call WriteDec           ; Printing EAX value
     call Crlf               ; Print New Line
-    
     
     xchg ax, bx             ; Swap using XCHG
     
