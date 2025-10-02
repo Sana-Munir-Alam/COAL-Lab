@@ -5,7 +5,7 @@ INCLUDE Irvine32.inc
 .code
 main PROC
     
-    mov ecx, 11     ; Set Counter Loop to Run 10 times
+    mov ecx, 11     ; Set Counter Loop to Run 11 times as Value 15 is inclusive
     mov eax, 5      ; Store the First value to be Printed
     Print:
         call WriteInt   ; Print the Value
