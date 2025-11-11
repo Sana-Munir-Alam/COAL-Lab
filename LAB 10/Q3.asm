@@ -1,17 +1,15 @@
 INCLUDE Irvine32.inc
 
 .data
-array DWORD 5,9,2,15,7,1,20,11,6,8,4,13,17,10,3,14,16,12,19,18
-msgMin BYTE "Minimum value: ",0
-msgMax BYTE "Maximum value: ",0
-minVal DWORD ?
-maxVal DWORD ?
+array DWORD 45, 12, 67, 89, 34, 23, 90, 11, 56, 78, 2, 45, 99, 3, 67, 88, 15, 42, 76, 31
+arraySize = 20
+minMsg BYTE "Minimum value: ",0
+maxMsg BYTE "Maximum value: ",0
 
 .code
 main PROC
-    lea eax, array
-    push eax
-    push LENGTHOF array
+    push OFFSET array
+    push arraySize
     call MinMaxArray
     add esp, 8
     exit
@@ -19,49 +17,41 @@ main ENDP
 
 MinMaxArray PROC
     push ebp
-    mov  ebp, esp
-
-    mov ecx, [ebp+8]      ; size (length of array to run loop)
-    mov esi, [ebp+12]     ; array pointer start
-    mov eax, [esi]
-    mov ebx, eax
-
-    nextItem:
-        add esi, 4
-        dec ecx
-        jz done
-        mov edx, [esi]
-        cmp edx, eax
-        jl newMin
+    mov ebp, esp
+    pushad
+    mov esi, [ebp + 12]  ; array address
+    mov ecx, [ebp + 8]   ; array size
+    mov eax, [esi]       ; initialize min with first element
+    mov ebx, [esi]       ; initialize max with first element
+    add esi, 4
+    dec ecx
+    
+FindLoop:
+    mov edx, [esi]
+    cmp edx, eax
+    jge CheckMax
+    mov eax, edx         ; new minimum
+    jmp NextElement
+    CheckMax:
         cmp edx, ebx
-        jg newMax
-        jmp nextItem
-
-    newMin:
-        mov eax, edx
-        jmp nextItem
-
-    newMax:
-        mov ebx, edx
-        jmp nextItem
-
-    done:
-        mov minVal, eax
-        mov maxVal, ebx
-
-        mov edx, OFFSET msgMin
-        call WriteString
-        mov eax, minVal
-        call WriteDec
-        call Crlf
-
-        mov edx, OFFSET msgMax
-        call WriteString
-        mov eax, maxVal
-        call WriteDec
-        call Crlf
-
-        pop ebp
-        ret
+        jle NextElement
+        mov ebx, edx         ; new maximum
+    NextElement:
+        add esi, 4
+        loop FindLoop
+   
+    mov edx, OFFSET minMsg
+    call WriteString
+    call WriteDec
+    call Crlf
+    
+    mov edx, OFFSET maxMsg
+    mov eax, ebx
+    call WriteString
+    call WriteDec
+    
+    popad
+    pop ebp
+    ret
 MinMaxArray ENDP
 END main
