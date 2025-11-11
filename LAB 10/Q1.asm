@@ -1,34 +1,33 @@
 INCLUDE Irvine32.inc
 
 .data
-Var1 DWORD 12
-Var2 DWORD 2
-Var3 DWORD 3
+Num1 DWORD 5
+Num2 DWORD 7
+Num3 DWORD 3
 
 .code
 main PROC
-    push Var1
-    push Var2
-    push Var3
-    call ThreeProd
-    add esp, 12          ; clean up (3 parameters × 4 bytes)
+    push Num3       ; Storing Variables
+    push Num2
+    push Num1
+    call ThreeProd  ; Calling Procedure
+    add esp, 12     ; Clear Stack
+    
     exit
 main ENDP
 
 ThreeProd PROC
-    push ebp
-    mov  ebp, esp
-
-    mov eax, [ebp+8]     ; Var3
-    mov ebx, [ebp+12]    ; Var2
-    mul ebx              ; EAX = Var3 * Var2
-    mov ecx, [ebp+16]    ; Var1
-    mul ecx              ; EAX = (Var3*Var2)*Var1
-
+    push ebp            ; Storing EBP
+    mov ebp, esp
+    
+    mov eax, [ebp + 8]   ; first parameter (+8 due to EBP and Return Address occuping initial space)
+    mov ebx, [ebp + 12]  ; second parameter
+    mul ebx              ; eax = Num1 * Num2
+    mov ebx, [ebp + 16]  ; third parameter
+    mul ebx              ; eax = (Num1 * Num2) * Num3
+    
     call WriteDec
-    call Crlf
-
-    pop ebp
+    pop ebp              ; Remove EBP
     ret
 ThreeProd ENDP
 END main
