@@ -26,42 +26,42 @@ MinMaxArray PROC
     mov eax, [esi]
     mov ebx, eax
 
-nextItem:
-    add esi, 4
-    dec ecx
-    jz done
-    mov edx, [esi]
-    cmp edx, eax
-    jl newMin
-    cmp edx, ebx
-    jg newMax
-    jmp nextItem
+    nextItem:
+        add esi, 4
+        dec ecx
+        jz done
+        mov edx, [esi]
+        cmp edx, eax
+        jl newMin
+        cmp edx, ebx
+        jg newMax
+        jmp nextItem
 
-newMin:
-    mov eax, edx
-    jmp nextItem
+    newMin:
+        mov eax, edx
+        jmp nextItem
 
-newMax:
-    mov ebx, edx
-    jmp nextItem
+    newMax:
+        mov ebx, edx
+        jmp nextItem
 
-done:
-    mov minVal, eax
-    mov maxVal, ebx
+    done:
+        mov minVal, eax
+        mov maxVal, ebx
 
-    mov edx, OFFSET msgMin
-    call WriteString
-    mov eax, minVal
-    call WriteDec
-    call Crlf
+        mov edx, OFFSET msgMin
+        call WriteString
+        mov eax, minVal
+        call WriteDec
+        call Crlf
 
-    mov edx, OFFSET msgMax
-    call WriteString
-    mov eax, maxVal
-    call WriteDec
-    call Crlf
+        mov edx, OFFSET msgMax
+        call WriteString
+        mov eax, maxVal
+        call WriteDec
+        call Crlf
 
-    pop ebp
-    ret
+        pop ebp
+        ret
 MinMaxArray ENDP
 END main
